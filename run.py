@@ -2,23 +2,23 @@
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 """
->>> Dog = record_factory('Dog', 'name weight owner')  # <1>
+>>> Dog = record_factory('Dog', 'name weight owner')
 >>> rex = Dog('Rex', 30, 'Bob')
->>> rex  # <2>
+>>> rex
 Dog(name='Rex', weight=30, owner='Bob')
->>> name, weight, _ = rex  # <3>
+>>> name, weight, _ = rex
 >>> name, weight
 ('Rex', 30)
->>> "{2}'s dog weighs {1}kg".format(*rex)  # <4>
+>>> "{2}'s dog weighs {1}kg".format(*rex)
 "Bob's dog weighs 30kg"
->>> rex.weight = 32  # <5>
+>>> rex.weight = 32
 >>> rex
 Dog(name='Rex', weight=32, owner='Bob')
->>> Dog.__mro__  # <6>
-(<class 'factories.Dog'>, <class 'object'>)
+>>> Dog.__mro__
+(<class '__main__.Dog'>, <class 'object'>)
 >>> Dog = record_factory('Dog', ['name', 'weight', 'owner'])
 >>> Dog.__slots__
-('name', 'weight', 'owner')
+['name', 'weight', 'owner']
 """
 from collections.abc import Iterable
 from typing import Union, Any, Iterator
@@ -38,7 +38,10 @@ def record_factory(cls_name: str, field_names: FieldNames) -> type(object):
             yield getattr(self, name)
 
     def __repr__(self) -> str:
-        return ", ".join(f"{k}={v}" for k, v in zip(slots, self))
+        return "{}({})".format(
+            self.__class__.__name__,
+            ", ".join(f"{k}={v!r}" for k, v in zip(slots, self)),
+        )
 
     clsdict = {
         "__init__": __init__,
@@ -58,6 +61,6 @@ def get_field_names(field_names: FieldNames) -> tuple[str]:
 
 
 if __name__ == "__main__":
-    Dog = record_factory("Dog", "name weight owner")
-    rex = Dog("Rex", 30, "Bob")
-    print(rex)
+    import doctest
+
+    doctest.testmod()
