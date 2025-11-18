@@ -30,7 +30,7 @@ def record_factory(cls_name: str, field_names: FieldNames) -> type(object):
     slots = get_field_names(field_names)
 
     def __init__(self, *args, **kwargs):
-        kw = {k: v for k, v in zip(slots, args)}
+        kw = dict(zip(slots, args))
         kw.update(kwargs)
         for name, value in kw.items():
             setattr(self, name, value)
