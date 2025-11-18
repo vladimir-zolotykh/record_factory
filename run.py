@@ -26,7 +26,7 @@ from typing import Union, Any, Iterator
 FieldNames = Union[str, Iterable[str]]
 
 
-def record_factory(cls_name: str, field_names: FieldNames) -> type(object):
+def record_factory(cls_name: str, field_names: FieldNames) -> type[object]:
     slots = get_field_names(field_names)
 
     def __init__(self, *args, **kwargs):
@@ -55,11 +55,16 @@ def record_factory(cls_name: str, field_names: FieldNames) -> type(object):
     return type(cls_name, (object,), clsdict)
 
 
-def get_field_names(field_names: FieldNames) -> tuple[str]:
+def get_field_names(field_names: FieldNames) -> tuple[str, ...]:
+    names: list[str] | Iterable[str]
     if isinstance(field_names, str):
-        return field_names.replace(",", " ").split()
+        names = field_names.replace(",", " ").split()
     else:
-        return field_names
+        names = field_names
+    if not all(n.isidentifier() for n in names):
+        raise TypeError("All field names must be identifiers")
+    # return tuple(names)
+    return names
 
 
 if __name__ == "__main__":
