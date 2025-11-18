@@ -26,6 +26,7 @@ Dog(name='Rex', weight=32, owner='Bob')
 """
 from collections.abc import Iterable
 from typing import Union, Any, Iterator
+from inspect import Signature, Parameter
 
 FieldNames = Union[str, Iterable[str]]
 
@@ -34,9 +35,11 @@ def record_factory(cls_name: str, field_names: FieldNames) -> type[object]:
     slots = get_field_names(field_names)
 
     def __init__(self, *args, **kwargs):
-        kw = dict(zip(slots, args))
-        kw.update(kwargs)
-        for name, value in kw.items():
+        sig = Signature(
+            Parameter(name=name, kind=Parameter.POSITIONAL_OR_KEYWORD) for name in slots
+        )
+        bound = sig.bind(*args, **kwargs)
+        for name, value in bound.arguments.items():
             setattr(self, name, value)
 
     def __iter__(self) -> Iterator[Any]:
