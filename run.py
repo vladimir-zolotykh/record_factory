@@ -23,6 +23,18 @@ Dog(name='Rex', weight=32, owner='Bob')
 >>> Dog = record_factory('Dog', ['name', 'weight', 'owner'])
 >>> Dog.__slots__
 ('name', 'weight', 'owner')
+>>> rex = Dog('Rex', 30)
+Traceback (most recent call last):
+  ...
+TypeError: missing a required argument: 'owner'
+>>> rex = Dog('Rex', 30, 'Bob', owner='Bob')
+Traceback (most recent call last):
+...
+TypeError: multiple values for argument 'owner'
+>>> rex = Dog('Rex', 30, 'Bob', master='Bob')
+Traceback (most recent call last):
+...
+TypeError: got an unexpected keyword argument 'master'
 """
 from collections.abc import Iterable
 from typing import Union, Any, Iterator
