@@ -3,6 +3,10 @@
 # PYTHON_ARGCOMPLETE_OK
 """
 >>> Dog = record_factory('Dog', 'name weight owner')
+>>> record_factory('Cat', ['2name', 'weight', 'owner'])
+Traceback (most recent call last):
+  ...
+TypeError: All field names must be identifiers
 >>> rex = Dog('Rex', 30, 'Bob')
 >>> rex
 Dog(name='Rex', weight=30, owner='Bob')
