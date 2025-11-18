@@ -18,7 +18,7 @@ Dog(name='Rex', weight=32, owner='Bob')
 (<class '__main__.Dog'>, <class 'object'>)
 >>> Dog = record_factory('Dog', ['name', 'weight', 'owner'])
 >>> Dog.__slots__
-['name', 'weight', 'owner']
+('name', 'weight', 'owner')
 """
 from collections.abc import Iterable
 from typing import Union, Any, Iterator
@@ -63,8 +63,7 @@ def get_field_names(field_names: FieldNames) -> tuple[str, ...]:
         names = field_names
     if not all(n.isidentifier() for n in names):
         raise TypeError("All field names must be identifiers")
-    # return tuple(names)
-    return names
+    return tuple(names)
 
 
 if __name__ == "__main__":
